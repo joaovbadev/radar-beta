@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(python -m pip install pandas fastapi uvicorn beautifulsoup4 lxml playwright python-dotenv pydantic httpx -q 2>&1)",
+      "Bash(python test_scraper.py)"
+    ]
+  }
+}
