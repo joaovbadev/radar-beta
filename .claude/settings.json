@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m 'fix: use uvicorn directly instead of gunicorn for Render *)"
     ]
   }
 }
