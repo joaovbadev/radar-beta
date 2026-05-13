@@ -2,6 +2,7 @@ import sys
 import asyncio
 import traceback
 import os
+import subprocess
 from contextlib import asynccontextmanager
 
 import uvicorn
@@ -24,6 +25,17 @@ if sys.platform == "win32":
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Ensure Playwright browsers are installed (required on ephemeral filesystems like Render Free)
+    if sys.platform != "win32":
+        logger.info("Instalando browsers do Playwright...")
+        result = subprocess.run(
+            [sys.executable, "-m", "playwright", "install", "chromium"],
+            capture_output=True, text=True
+        )
+        if result.returncode != 0:
+            logger.error("Falha ao instalar Playwright: %s", result.stderr)
+        else:
+            logger.info("Playwright: browsers prontos")
     logger.info("Opportunity Radar API -- iniciada")
     yield
     logger.info("API encerrada")
