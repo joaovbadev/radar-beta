@@ -1,6 +1,8 @@
 import axios from 'axios'
 
-const BASE = '/api'
+// Use VITE_API_URL from .env, fallback to relative path for local dev
+const API_BASE_URL = import.meta.env.VITE_API_URL || window.location.origin
+const BASE = `${API_BASE_URL}/api`
 
 const http = axios.create({ baseURL: BASE, timeout: 15000 })
 
@@ -26,7 +28,7 @@ export const api = {
  * @param {{ onFound, onItem, onComplete, onError }} callbacks
  */
 export function streamSearch(city, category, { onFound, onItem, onComplete, onError }) {
-  const url = `${BASE}/search/stream`
+  const url = `${API_BASE_URL}/api/search/stream`
 
   // SSE requires GET, but our endpoint is POST.
   // We use a workaround: send a regular fetch with ReadableStream.

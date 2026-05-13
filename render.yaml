@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: opportunity-radar-api
+    runtime: python
+    plan: free
+
+    rootDir: backend
+
+    buildCommand: >
+      pip install -r requirements.txt &&
+      playwright install chromium
+
+    startCommand: >
+      gunicorn -w 1 -k uvicorn.workers.UvicornWorker main:app
+
+    envVars:
+      - key: CORS_ORIGINS
+        value: https://opportunity-radar.vercel.app,http://localhost:5173
+      - key: ENVIRONMENT
+        value: production
+      - key: DEBUG
+        value: "false"

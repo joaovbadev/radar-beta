@@ -1,15 +1,19 @@
 import sys
 import asyncio
 import traceback
+import os
 from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
 
 from api.routes import router
 from utils.logger import setup_logger
+
+load_dotenv()
 
 logger = setup_logger(__name__)
 
@@ -32,9 +36,13 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# Parse CORS origins from environment (comma-separated, no spaces)
+cors_origins = os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")
+cors_origins = [origin.strip() for origin in cors_origins if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=cors_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
